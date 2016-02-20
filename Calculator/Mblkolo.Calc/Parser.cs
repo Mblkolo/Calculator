@@ -12,11 +12,11 @@ namespace Mblkolo.Calc
     /// </summary>
     class Parser
     {
-        public Stack<ICommand> Parse(string p)
+        public List<ICommand> Parse(string p)
         {
-            var commands = new Stack<ICommand>();
+            var commands = new List<ICommand>();
 
-            for(int i=0; i< p.Length; ++i)
+            for (int i = 0; i < p.Length; ++i)
             {
                 if (p[i] == ' ' || p[i] == '\t')
                     continue;
@@ -24,7 +24,7 @@ namespace Mblkolo.Calc
                 if (p[i] >= '0' && p[i] <= '9')
                 {
                     decimal value = parseValue(ref i, p);
-                    commands.Push(new PushCommand(value));
+                    commands.Add(new PushCommand(value));
                     continue;
                 }
 
@@ -37,7 +37,7 @@ namespace Mblkolo.Calc
         private decimal parseValue(ref int i, string p)
         {
             int inPos = i;
-            for (; i < p.Length && ((p[i] >= '0' && p[i] <= '9') || p[i] == '.' ) ; ++i)
+            for (; i < p.Length && ((p[i] >= '0' && p[i] <= '9') || p[i] == '.'); ++i)
                 ;
 
             string textValue = p.Substring(inPos, i - inPos);

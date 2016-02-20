@@ -29,10 +29,10 @@ namespace Mblkolo.Calc.Test
         {
             var parser = new Parser();
 
-            Stack<ICommand> commands= parser.Parse("1");
+            List<ICommand> commands= parser.Parse("1");
 
             Assert.That(commands.Count, Is.EqualTo(1));
-            var command = commands.Peek();
+            var command = commands[0];
             Assert.That(command, Is.TypeOf<PushCommand>());
             Assert.That((command as PushCommand).Value, Is.EqualTo(1m));
         }
