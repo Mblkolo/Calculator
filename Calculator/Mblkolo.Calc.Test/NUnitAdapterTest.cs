@@ -11,7 +11,7 @@ namespace Mblkolo.Calc.Test
     public class NUnitAdapterTest
     {
         [Test]
-        public void Run()
+        public void NUintAdapterIsWork()
         {
             Assert.That(true);
         }
