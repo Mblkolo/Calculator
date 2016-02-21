@@ -1,6 +1,7 @@
 ﻿using Rusakov.Calc.Commands;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,7 +43,7 @@ namespace Rusakov.Calc
 
             string textValue = p.Substring(inPos, i - inPos);
             decimal value;
-            if (!decimal.TryParse(textValue, out value))
+            if (!decimal.TryParse(textValue, NumberStyles.Any, CultureInfo.InvariantCulture, out value))
                 throw new ArgumentException("Не удаётся преобразовать в число " + textValue);
 
             return value;

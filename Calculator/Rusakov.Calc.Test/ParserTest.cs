@@ -24,17 +24,24 @@ namespace Rusakov.Calc.Test
 
         //Выражение - это [число] или [(выражение)] или [выражение бинарный оператор выражение] или [унарный оператор выражение]
 
-        [Test]
-        public void ExpressionIsValue()
+        static object[] ExpressionIsValueCases =
+        {
+            new object[] { "0", 0m },
+            new object[] { "9", 9m },
+            new object[] { "5.5", 5.5m } 
+        };
+
+        [Test, TestCaseSource("ExpressionIsValueCases")]
+        public void ExpressionIsValue(string expression, decimal result)
         {
             var parser = new Parser();
 
-            List<ICommand> commands= parser.Parse("1");
+            List<ICommand> commands = parser.Parse(expression);
 
             Assert.That(commands.Count, Is.EqualTo(1));
             var command = commands[0];
             Assert.That(command, Is.TypeOf<PushCommand>());
-            Assert.That((command as PushCommand).Value, Is.EqualTo(1m));
+            Assert.That((command as PushCommand).Value, Is.EqualTo(result));
         }
 
 
