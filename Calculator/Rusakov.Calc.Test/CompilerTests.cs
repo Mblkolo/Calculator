@@ -113,5 +113,28 @@ namespace Rusakov.Calc.Test
 
             Assert.Throws<ArgumentException>(commands);
         }
+
+        //Либо оператор op лево-ассоциативен и его приоритет меньше чем у оператора topStackOp либо равен,
+        //или оператор op право-ассоциативен и его приоритет меньше чем у topStackOp
+        //static object[] CompareOperationCases =
+        //{
+        //    new object[] { new OperationStub('+', false, true, 2), new OperationStub('-', false, true, 1), false },
+        //    new object[] { new OperationStub('+', false, true, 2), new OperationStub('-', false, true, 2), true},
+        //    new object[] { new OperationStub('+', false, true, 2), new OperationStub('-', false, true, 3), true},
+        //    new object[] { new OperationStub('+', false, false, 2), new OperationStub('-', false, true, 1), false },
+        //    new object[] { new OperationStub('+', false, false, 2), new OperationStub('-', false, true, 2), false},
+        //    new object[] { new OperationStub('+', false, false, 2), new OperationStub('-', false, true, 3), true},
+        //};
+
+
+        //[Test, TestCaseSource("CompareOperationCases")]
+        //public void CompareOperation(IOperation op, IOperation topStackOp, bool result)
+        //{
+        //    var parser = new PublicParser(new Dictionary<char, IOperation>());
+
+        //    bool res = parser.CompareOperation(op, topStackOp);
+
+        //    Assert.That(res, Is.EqualTo(result));
+        //}
     }
 }
