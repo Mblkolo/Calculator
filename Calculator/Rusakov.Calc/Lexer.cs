@@ -19,16 +19,11 @@ namespace Rusakov.Calc
                 if (c == ' ' || c == '\t')
                     continue;
 
-                if (c >= '0' && c <= '9')
+                if (IsDigit(c))
                 {
-                    bool mayBeDigit = true;
                     int p = i;
-                    for (p = i; p < input.Length && mayBeDigit; ++p )
-                    {
-                        var dc = input[p];
-                        mayBeDigit = (dc >= '0' && dc <= '9') || dc == '.';
+                    while (p < input.Length && IsDigit(input[p]))
                         ++p;
-                    }
 
                     var value = input.Substring(i, p-i);
                     lexemes.Add(new Lexeme(value, LexemeType.Number));
@@ -55,6 +50,11 @@ namespace Rusakov.Calc
             }
 
             return lexemes.ToArray();
+        }
+
+        protected bool IsDigit(char dc)
+        {
+            return (dc >= '0' && dc <= '9') || dc == '.';
         }
     }
 }
