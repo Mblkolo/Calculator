@@ -45,6 +45,8 @@
     <Compile Include="Commands\PushCommand.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="IOperation.cs" />
+    <Compile Include="Lexeme.cs" />
+    <Compile Include="Lexer.cs" />
     <Compile Include="Operations\PlusOperation.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />
