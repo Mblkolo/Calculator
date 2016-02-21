@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Rusakov.Calc.Operations
 {
-    class PlusOperation : IOperation
+    class DivideOperation : IOperation
     {
         public char Operator
         {
-            get { return '+'; }
+            get { return '/'; }
         }
 
         public bool IsUnary
@@ -26,12 +26,12 @@ namespace Rusakov.Calc.Operations
 
         public byte Priority
         {
-            get { return 16 - 4; }
+            get { return 16 - 3; }
         }
 
         public ICommand GetCommand()
         {
-            return new PlusCommand();
+            return new DivideCommand();
         }
     }
 }

@@ -41,6 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\DivideCommand.cs" />
+    <Compile Include="Commands\MinusCommand.cs" />
+    <Compile Include="Commands\MultiplyCommand.cs" />
     <Compile Include="Commands\PlusCommand.cs" />
     <Compile Include="Commands\PushCommand.cs" />
     <Compile Include="Compiler.cs" />
@@ -48,6 +51,9 @@
     <Compile Include="IOperation.cs" />
     <Compile Include="Lexeme.cs" />
     <Compile Include="Lexer.cs" />
+    <Compile Include="Operations\DivideOperation.cs" />
+    <Compile Include="Operations\MinusOperation.cs" />
+    <Compile Include="Operations\MultiplyOperation.cs" />
     <Compile Include="Operations\PlusOperation.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

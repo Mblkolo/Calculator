@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Rusakov.Calc.Operations
 {
-    class PlusOperation : IOperation
+    class MinusOperation : IOperation
     {
         public char Operator
         {
-            get { return '+'; }
+            get { return '-'; }
         }
 
         public bool IsUnary
@@ -31,7 +31,7 @@ namespace Rusakov.Calc.Operations
 
         public ICommand GetCommand()
         {
-            return new PlusCommand();
+            return new MinusCommand();
         }
     }
 }
