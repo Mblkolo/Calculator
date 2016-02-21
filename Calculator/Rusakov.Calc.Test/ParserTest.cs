@@ -10,7 +10,7 @@ using Rusakov.Calc.Operations;
 namespace Rusakov.Calc.Test
 {
     [TestFixture]
-    public class ParserTest
+    internal class ParserTest
     {
         //Самый сложный вопрос: где же остановиться?
         //Вычислитель выражений может поодерживать
@@ -58,6 +58,68 @@ namespace Rusakov.Calc.Test
             Assert.That(commands[0], Is.TypeOf<PushCommand>());
             Assert.That(commands[1], Is.TypeOf<PushCommand>());
             Assert.That(commands[2], Is.TypeOf<PlusCommand>());
+        }
+
+        //Либо оператор op лево-ассоциативен и его приоритет меньше чем у оператора topStackOp либо равен,
+        //или оператор op право-ассоциативен и его приоритет меньше чем у topStackOp
+        static object[] CompareOperationCases =
+        {
+            new object[] { new OperationStub('+', false, true, 2), new OperationStub('-', false, true, 1), false },
+            new object[] { new OperationStub('+', false, true, 2), new OperationStub('-', false, true, 2), true},
+            new object[] { new OperationStub('+', false, true, 2), new OperationStub('-', false, true, 3), true},
+            new object[] { new OperationStub('+', false, false, 2), new OperationStub('-', false, true, 1), false },
+            new object[] { new OperationStub('+', false, false, 2), new OperationStub('-', false, true, 2), false},
+            new object[] { new OperationStub('+', false, false, 2), new OperationStub('-', false, true, 3), true},
+        };
+
+
+        [Test, TestCaseSource("CompareOperationCases")]
+        public void CompareOperation(IOperation op, IOperation topStackOp, bool result)
+        {
+            var parser = new PublicParser(new Dictionary<char, IOperation>());
+
+            bool res = parser.CompareOperation(op, topStackOp);
+
+            Assert.That(res, Is.EqualTo(result));
+        }
+    }
+
+
+    internal class PublicParser : Parser
+    {
+        public PublicParser(Dictionary<char, IOperation> operations)
+            : base (operations)
+        {
+
+        }
+
+        public new bool CompareOperation(IOperation op, IOperation topStackOp)
+        {
+            return base.CompareOperation(op, topStackOp);
+        }
+    }
+
+    internal class OperationStub : IOperation
+    {
+        public char Operator { get; private set; }
+
+        public bool IsUnary { get; private set; }
+
+        public bool IsLeft { get; private set; }
+
+        public byte Priority { get; private set; }
+
+        public OperationStub(char op, bool isUnary, bool isLeft, byte priory)
+        {
+            Operator = op;
+            IsUnary = isUnary;
+            IsLeft = isLeft;
+            Priority = priory;
+        }
+        
+        public ICommand GetCommand()
+        {
+            throw new NotImplementedException();
         }
     }
 }

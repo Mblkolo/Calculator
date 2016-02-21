@@ -61,7 +61,7 @@ namespace Rusakov.Calc
             return commands;
         }
 
-        private decimal parseValue(ref int i, string p)
+        protected decimal parseValue(ref int i, string p)
         {
             int inPos = i;
             for (; i < p.Length && ((p[i] >= '0' && p[i] <= '9') || p[i] == '.'); ++i)
@@ -75,7 +75,7 @@ namespace Rusakov.Calc
             return value;
         }
 
-        private bool CompareOperation(IOperation operation, IOperation topStackOperation)
+        protected bool CompareOperation(IOperation operation, IOperation topStackOperation)
         {
             if (operation.IsLeft && operation.Priority <= topStackOperation.Priority)
                 return true;
