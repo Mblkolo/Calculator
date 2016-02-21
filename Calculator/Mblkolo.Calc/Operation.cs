@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mblkolo.Calc
+namespace Rusakov.Calc
 {
     interface IOperation<T> where T : ICommand
     {

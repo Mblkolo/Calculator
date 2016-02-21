@@ -1,4 +1,4 @@
-﻿using Mblkolo.Calc.Commands;
+﻿using Rusakov.Calc.Commands;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mblkolo.Calc.Test
+namespace Rusakov.Calc.Test
 {
     [TestFixture]
     public class ParserTest

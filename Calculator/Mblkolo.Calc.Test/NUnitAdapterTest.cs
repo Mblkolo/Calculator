@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mblkolo.Calc.Test
+namespace Rusakov.Calc.Test
 {
     [TestFixture]
     public class NUnitAdapterTest

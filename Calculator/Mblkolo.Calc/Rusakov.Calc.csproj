@@ -7,8 +7,8 @@
     <ProjectGuid>{12F14CC0-1FD2-49F2-8F0E-AC4ADDC33BCA}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mblkolo.Calc</RootNamespace>
-    <AssemblyName>Mblkolo.Calc</AssemblyName>
+    <RootNamespace>Rusakov.Calc</RootNamespace>
+    <AssemblyName>Rusakov.Calc</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

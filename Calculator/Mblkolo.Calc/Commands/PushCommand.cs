@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mblkolo.Calc.Commands
+namespace Rusakov.Calc.Commands
 {
     class PushCommand : ICommand
     {

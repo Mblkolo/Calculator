@@ -1,11 +1,11 @@
-﻿using Mblkolo.Calc.Commands;
+﻿using Rusakov.Calc.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mblkolo.Calc
+namespace Rusakov.Calc
 {
     /// <summary>
     /// Преобразует выражение из инфиксной формы в обратную польскую
