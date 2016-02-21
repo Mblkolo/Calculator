@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rusakov.Calc", "Mblkolo.Calc\Rusakov.Calc.csproj", "{12F14CC0-1FD2-49F2-8F0E-AC4ADDC33BCA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rusakov.Calc", "Rusakov.Calc\Rusakov.Calc.csproj", "{12F14CC0-1FD2-49F2-8F0E-AC4ADDC33BCA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rusakov.Calc.Test", "Mblkolo.Calc.Test\Rusakov.Calc.Test.csproj", "{016BC631-D753-4CC8-9C51-2CB15A2DD67C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rusakov.Calc.Test", "Rusakov.Calc.Test\Rusakov.Calc.Test.csproj", "{016BC631-D753-4CC8-9C51-2CB15A2DD67C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
