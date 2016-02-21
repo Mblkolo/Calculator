@@ -14,6 +14,7 @@ namespace Rusakov.Calc.Test
         [TestCase("(", LexemeType.OpenBracket)]
         [TestCase(")", LexemeType.CloseBracket)]
         [TestCase("+", LexemeType.Operator)]
+        [TestCase("p", LexemeType.Operator)]
         public void SimpleLexeme(string text, LexemeType type)
         {
             var lexer = new Lexer();

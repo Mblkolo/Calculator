@@ -8,8 +8,14 @@ namespace Rusakov.Calc
 {
     class Lexeme
     {
-        public LexemeType Type;
-        public string Value;
+        public readonly string Value;
+        public readonly LexemeType Type;
+
+        public Lexeme(string value, LexemeType type)
+        {
+            Value = value;
+            Type = type;
+        }
     }
 
     enum LexemeType
