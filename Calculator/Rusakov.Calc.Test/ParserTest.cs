@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Rusakov.Calc.Operations;
 
 namespace Rusakov.Calc.Test
 {
@@ -34,7 +35,7 @@ namespace Rusakov.Calc.Test
         [Test, TestCaseSource("ExpressionIsValueCases")]
         public void ExpressionIsValue(string expression, decimal result)
         {
-            var parser = new Parser();
+            var parser = new Parser(new Dictionary<char, IOperation>());
 
             List<ICommand> commands = parser.Parse(expression);
 
@@ -44,6 +45,19 @@ namespace Rusakov.Calc.Test
             Assert.That((command as PushCommand).Value, Is.EqualTo(result));
         }
 
+        //TODO заменить на тест операций
+        [Test]
+        public void PlusParseTest()
+        {
+            var operations = new Dictionary<char, IOperation> { {'+', new PlusOperation() } };
+            var parser = new Parser(operations);
 
+            List<ICommand> commands = parser.Parse("1 + 2");
+
+            Assert.That(commands.Count, Is.EqualTo(3));
+            Assert.That(commands[0], Is.TypeOf<PushCommand>());
+            Assert.That(commands[1], Is.TypeOf<PushCommand>());
+            Assert.That(commands[2], Is.TypeOf<PlusCommand>());
+        }
     }
 }

@@ -13,24 +13,50 @@ namespace Rusakov.Calc
     /// </summary>
     class Parser
     {
+        public readonly Dictionary<char, IOperation> Operations;
+
+        public Parser(Dictionary<char, IOperation> operations)
+        {
+            Operations = operations;
+        }
+
         public List<ICommand> Parse(string p)
         {
             var commands = new List<ICommand>();
+            var opStack = new Stack<IOperation>();
 
             for (int i = 0; i < p.Length; ++i)
             {
-                if (p[i] == ' ' || p[i] == '\t')
+                char c = p[i];
+
+                if (c == ' ' || c == '\t')
                     continue;
 
-                if (p[i] >= '0' && p[i] <= '9')
+                if (c >= '0' && c <= '9')
                 {
                     decimal value = parseValue(ref i, p);
                     commands.Add(new PushCommand(value));
                     continue;
                 }
 
+                IOperation op;
+                if(Operations.TryGetValue(c, out op))
+                {
+                    while (opStack.Count > 0 && CompareOperation(op, opStack.Peek() ))
+                    {
+                        commands.Add(opStack.Pop().GetCommand());
+                    }
+                    opStack.Push(op);
+                    continue;
+                }
+
+
+
                 throw new ArgumentException("Неизвестный символ в позиции " + i);
             }
+
+            while (opStack.Count > 0)
+                commands.Add(opStack.Pop().GetCommand());
 
             return commands;
         }
@@ -47,6 +73,17 @@ namespace Rusakov.Calc
                 throw new ArgumentException("Не удаётся преобразовать в число " + textValue);
 
             return value;
+        }
+
+        private bool CompareOperation(IOperation operation, IOperation topStackOperation)
+        {
+            if (operation.IsLeft && operation.Priority <= topStackOperation.Priority)
+                return true;
+
+            if (!operation.IsLeft && operation.Priority < topStackOperation.Priority)
+                return true;
+
+            return false;
         }
     }
 }
