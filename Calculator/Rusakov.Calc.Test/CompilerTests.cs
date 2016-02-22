@@ -310,9 +310,9 @@ namespace Rusakov.Calc.Test
             var lexeme = new Lexeme("+", LexemeType.Operator);
             var commands = new List<ICommand>();
             var stack = new Stack<Lexeme>();
-            stack.Push(new Lexeme("*", LexemeType.Operator));
-            stack.Push(new Lexeme("+", LexemeType.Operator));
             stack.Push(new Lexeme("-", LexemeType.Operator));
+            stack.Push(new Lexeme("+", LexemeType.Operator));
+            stack.Push(new Lexeme("*", LexemeType.Operator));
 
             compiller.ProcessOperatorLexem(lexeme, commands, stack);
 
@@ -333,9 +333,9 @@ namespace Rusakov.Calc.Test
             var lexeme = new Lexeme("+", LexemeType.Operator);
             var commands = new List<ICommand>();
             var stack = new Stack<Lexeme>();
-            stack.Push(new Lexeme("*", LexemeType.Operator));
-            stack.Push(new Lexeme("+", LexemeType.Operator));
             stack.Push(new Lexeme("-", LexemeType.Operator));
+            stack.Push(new Lexeme("+", LexemeType.Operator));
+            stack.Push(new Lexeme("*", LexemeType.Operator));
 
             compiller.ProcessOperatorLexem(lexeme, commands, stack);
 
