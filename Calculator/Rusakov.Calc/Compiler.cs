@@ -26,7 +26,8 @@ namespace Rusakov.Calc
         {
         }
 
-
+        //Реализация алгоритма сортировочной станции
+        //https://ru.wikipedia.org/wiki/%D0%90%D0%BB%D0%B3%D0%BE%D1%80%D0%B8%D1%82%D0%BC_%D1%81%D0%BE%D1%80%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%BE%D1%87%D0%BD%D0%BE%D0%B9_%D1%81%D1%82%D0%B0%D0%BD%D1%86%D0%B8%D0%B8
         public ICommand[] Compile(Lexeme[] lexemes)
         {
             var commands = new List<ICommand>();
@@ -36,11 +37,7 @@ namespace Rusakov.Calc
             {
                 if(lex.Type == LexemeType.Number)
                 {
-                    decimal number;
-                    if(!decimal.TryParse(lex.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out number))
-                        throw new ArgumentException("Не удалось преобразовать в число " + lex.Value);
-
-                    commands.Add(new PushCommand(number));
+                    ProcessNumberLexem(lex, commands, lexStack);
                     continue;
                 }
                 if(lex.Type == LexemeType.OpenBracket)
@@ -123,6 +120,54 @@ namespace Rusakov.Calc
                 throw new ArgumentException("Неизвестная операция " + operatorName);
 
             return op;
+        }
+
+        //Если токен — число, то добавить его в очередь вывода.
+        protected void ProcessNumberLexem(Lexeme lexeme, List<ICommand> commands, Stack<Lexeme> lexemeStack)
+        {
+            if(lexeme.Type != LexemeType.Number)
+                throw new ArgumentException("lexeme");
+
+            decimal number;
+            if (!decimal.TryParse(lexeme.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out number))
+                throw new ArgumentException("Не удалось преобразовать в число " + lexeme.Value);
+
+            commands.Add(new PushCommand(number));
+        }
+
+        //Если токен — открывающая скобка, то положить его в стек.
+        protected void ProcessOpenBracketLexem(Lexeme lexeme, List<ICommand> commands, Stack<Lexeme> lexemeStack)
+        {
+
+        }
+
+        //Если токен — закрывающая скобка:
+        //Пока токен на вершине стека не является открывающей скобкой, перекладывать операторы из стека в выходную очередь.
+        //Выкинуть открывающую скобку из стека, но не добавлять в очередь вывода.
+        //Если стек закончился до того, как был встречен токен открывающая скобка, то в выражении пропущена скобка.
+        protected void ProcessCloseBracketLexem(Lexeme lexeme, List<ICommand> commands, Stack<Lexeme> lexemeStack)
+        {
+
+        }
+
+        //Если токен — оператор op1, то:
+        //Пока присутствует на вершине стека токен оператор op2, и
+        //Либо оператор op1 лево-ассоциативен и его приоритет меньше чем у оператора op2 либо равен,
+        //или оператор op1 право-ассоциативен и его приоритет меньше чем у op2,
+        //переложить op2 из стека в выходную очередь;
+        //положить op1 в стек.
+        protected void ProcessOperatorLexem(Lexeme lexeme, List<ICommand> commands, Stack<Lexeme> lexemeStack)
+        {
+
+        }
+
+        //Если больше не осталось токенов на входе:
+        //Пока есть токены операторы в стеке:
+        //Если токен оператор на вершине стека — скобка, то в выражении присутствует незакрытая скобка.
+        //Переложить оператор из стека в выходную очередь.
+        protected void ProcessRemainingLexem(Lexeme lexeme, List<ICommand> commands, Stack<Lexeme> lexemeStack)
+        {
+
         }
     }
 }
