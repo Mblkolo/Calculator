@@ -16,7 +16,7 @@ namespace Rusakov.Calc.Test
         [TestCase(")", LexemeType.CloseBracket)]
         [TestCase("+", LexemeType.Operator)]
         [TestCase("p", LexemeType.Operator)]
-        public void SimpleLexeme(string text, LexemeType type)
+        public void Parse_SimpleLexeme_LexemeEqualsInputText(string text, LexemeType type)
         {
             var lexer = new Lexer();
             
@@ -30,7 +30,7 @@ namespace Rusakov.Calc.Test
         [TestCase("")]
         [TestCase(" ")]
         [TestCase("\t")]
-        public void EmptyLexeme(string text)
+        public void Parse_EmptyText_EmpytLexemeArray(string text)
         {
             var lexer = new Lexer();
 
@@ -40,7 +40,7 @@ namespace Rusakov.Calc.Test
         }
 
         [Test]
-        public void NumberWithOperator()
+        public void Parse_NumberWithOperator_NumberAndOperatorLexems()
         {
             var lexer = new Lexer();
             var text = "1+";
@@ -56,7 +56,7 @@ namespace Rusakov.Calc.Test
         }
 
         [Test]
-        public void LongLexeme()
+        public void Parse_LongLexeme_CorrectParse()
         {
             var lexer = new Lexer();
             var text = " 1.23abc21)d) ( ) d .2";
