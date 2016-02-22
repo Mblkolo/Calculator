@@ -53,18 +53,7 @@ namespace Rusakov.Calc
 
                 if(lex.Type == LexemeType.Operator)
                 {
-                    //Снимает часть лексем со стека
-                    while(lexStack.Count > 0 && lexStack.Peek().Type == LexemeType.Operator)
-                    {
-                        string topStackOperation = lexStack.Peek().Value;
-                        if (!CompareLexem(lex.Value, topStackOperation))
-                            break;
-
-                        lexStack.Pop();
-                        commands.Add(GetOperation(topStackOperation).GetCommand());
-                    }
-
-                    lexStack.Push(lex);
+                    ProcessOperatorLexem(lex, commands, lexStack);
                     continue;
                 }
 
@@ -163,7 +152,21 @@ namespace Rusakov.Calc
         //положить op1 в стек.
         protected void ProcessOperatorLexem(Lexeme lexeme, List<ICommand> commands, Stack<Lexeme> lexemeStack)
         {
+            if (lexeme.Type != LexemeType.Operator)
+                throw new ArgumentException("lexeme");
 
+            //Снимает часть лексем со стека
+            while (lexemeStack.Count > 0 && lexemeStack.Peek().Type == LexemeType.Operator)
+            {
+                string topStackOperation = lexemeStack.Peek().Value;
+                if (!CompareLexem(lexeme.Value, topStackOperation))
+                    break;
+
+                lexemeStack.Pop();
+                commands.Add(GetOperation(topStackOperation).GetCommand());
+            }
+
+            lexemeStack.Push(lexeme);
         }
 
         //Если больше не осталось токенов на входе:
