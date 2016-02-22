@@ -114,6 +114,74 @@ namespace Rusakov.Calc.Test
             Assert.Throws<ArgumentException>(commands);
         }
 
+        [Test]
+        public void Priory()
+        {
+            var operations = new IOperation[] 
+            {
+                new MockOperation('+', true, 1),
+                new MockOperation('*', true, 2),
+            };
+            var compiler = new Compiler(operations);
+            var lexemes = new[] { 
+                new Lexeme("1", LexemeType.Number),
+                new Lexeme("+", LexemeType.Operator),
+                new Lexeme("2", LexemeType.Number),
+                new Lexeme("*", LexemeType.Operator),
+                new Lexeme("3", LexemeType.Number)
+            };
+
+            var commands = compiler.Compile(lexemes);
+
+            Assert.That(commands.Length, Is.EqualTo(5));
+            Assert.That(commands[3], Is.TypeOf<MockCommand>());
+            Assert.That(commands[4], Is.TypeOf<MockCommand>());
+
+            Assert.That((commands[3] as MockCommand).Operation.Operator, Is.EqualTo('*'));
+            Assert.That((commands[4] as MockCommand).Operation.Operator, Is.EqualTo('+'));
+        }
+
+
+        class MockOperation : IOperation
+        {
+            public char Operator { get; set; }
+
+            public bool IsUnary { get; set; }
+
+            public bool IsLeft { get; set; }
+
+            public byte Priority { get; set; }
+
+            public MockOperation(char op, bool isLeft, byte priory)
+            {
+                Operator = op;
+                //IsUnary = IsUnary;
+                IsLeft = isLeft;
+                Priority = priory;
+            }
+
+            public ICommand GetCommand()
+            {
+                return new MockCommand(this);
+            }
+        }
+
+        class MockCommand : ICommand
+        {
+            public readonly MockOperation Operation;
+
+            public MockCommand(MockOperation operation)
+            {
+                Operation = operation;
+            }
+
+            public void Execute(Stack<decimal> state)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+
         //Либо оператор op лево-ассоциативен и его приоритет меньше чем у оператора topStackOp либо равен,
         //или оператор op право-ассоциативен и его приоритет меньше чем у topStackOp
         //static object[] CompareOperationCases =

@@ -102,7 +102,7 @@ namespace Rusakov.Calc
 
         //Либо оператор op лево-ассоциативен и его приоритет меньше чем у оператора topStackOp либо равен,
         //или оператор op право-ассоциативен и его приоритет меньше чем у topStackOp
-        private bool CompareLexem(string opName, string topStackOpName)
+        protected bool CompareLexem(string opName, string topStackOpName)
         {
             IOperation op = GetOperation(opName);
             IOperation topStackOp = GetOperation(topStackOpName);
@@ -116,7 +116,7 @@ namespace Rusakov.Calc
             return false;
         }
 
-        public IOperation GetOperation(string operatorName)
+        protected IOperation GetOperation(string operatorName)
         {
             IOperation op;
             if (!operations.TryGetValue(operatorName, out op))

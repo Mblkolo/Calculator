@@ -9,6 +9,7 @@ namespace Rusakov.Calc
     {
         char Operator { get; }
 
+        #warning IsUnary не реализовано
         bool IsUnary { get; }
 
         bool IsLeft { get; }
