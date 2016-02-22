@@ -141,6 +141,9 @@ namespace Rusakov.Calc.Test
             Assert.That((commands[4] as MockCommand).Operation.Operator, Is.EqualTo('+'));
         }
 
+
+
+
         [Test]
         public void ProcessNumberLexem_WithoutNumberLexem_FailProcess()
         {
@@ -182,6 +185,35 @@ namespace Rusakov.Calc.Test
             TestDelegate process = () => compiller.ProcessNumberLexem(lexeme, commands, stack);
 
             Assert.Throws<ArgumentException>(process);
+        }
+
+        [Test]
+        public void ProcessOpenBracketLexem_WithoutOpenBracketLexem_FailProcess()
+        {
+            var compiller = new OpenCompiler();
+            var lexeme = new Lexeme("2.0", LexemeType.Number);
+            var commands = new List<ICommand>();
+            var stack = new Stack<Lexeme>();
+
+            TestDelegate process = () => compiller.ProcessOpenBracketLexem(lexeme, commands, stack);
+
+            Assert.Throws<ArgumentException>(process);
+        }
+
+        [Test]
+        public void ProcessOpenBracketLexem_WithOpenBracketLexem_OpenBracketInStack_()
+        {
+            var compiller = new OpenCompiler();
+            var lexeme = new Lexeme("(", LexemeType.OpenBracket);
+            var commands = new List<ICommand>();
+            var stack = new Stack<Lexeme>();
+
+            compiller.ProcessOpenBracketLexem(lexeme, commands, stack);
+
+            Assert.That(commands.Count, Is.EqualTo(0));
+
+            Assert.That(stack.Count, Is.EqualTo(1));
+            Assert.That(stack.Peek(), Is.SameAs(lexeme));
         }
 
 
@@ -230,6 +262,11 @@ namespace Rusakov.Calc.Test
             public new void ProcessNumberLexem(Lexeme lexeme, List<ICommand> commands, Stack<Lexeme> lexemeStack)
             {
                 base.ProcessNumberLexem(lexeme, commands, lexemeStack);
+            }
+
+            public new void ProcessOpenBracketLexem(Lexeme lexeme, List<ICommand> commands, Stack<Lexeme> lexemeStack)
+            {
+                base.ProcessOpenBracketLexem(lexeme, commands, lexemeStack);
             }
 
         }

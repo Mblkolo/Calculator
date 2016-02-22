@@ -42,7 +42,7 @@ namespace Rusakov.Calc
                 }
                 if(lex.Type == LexemeType.OpenBracket)
                 {
-                    lexStack.Push(lex);
+                    ProcessOpenBracketLexem(lex, commands, lexStack);
                     continue;
                 }
                 if(lex.Type == LexemeType.CloseBracket)
@@ -138,7 +138,10 @@ namespace Rusakov.Calc
         //Если токен — открывающая скобка, то положить его в стек.
         protected void ProcessOpenBracketLexem(Lexeme lexeme, List<ICommand> commands, Stack<Lexeme> lexemeStack)
         {
+            if (lexeme.Type != LexemeType.OpenBracket)
+                throw new ArgumentException("lexeme");
 
+            lexemeStack.Push(lexeme);
         }
 
         //Если токен — закрывающая скобка:
