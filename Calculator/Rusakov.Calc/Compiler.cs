@@ -33,43 +33,32 @@ namespace Rusakov.Calc
             var commands = new List<ICommand>();
             var lexStack = new Stack<Lexeme>();
 
-            foreach(var lex in lexemes)
+            foreach (var lex in lexemes)
             {
-                if(lex.Type == LexemeType.Number)
+                switch (lex.Type)
                 {
-                    ProcessNumberLexem(lex, commands, lexStack);
-                    continue;
-                }
-                if(lex.Type == LexemeType.OpenBracket)
-                {
-                    ProcessOpenBracketLexem(lex, commands, lexStack);
-                    continue;
-                }
-                if(lex.Type == LexemeType.CloseBracket)
-                {
-                    ProcessCloseBracketLexem(lex, commands, lexStack);
-                    continue;
-                }
+                    case LexemeType.Number:
+                        ProcessNumberLexem(lex, commands, lexStack);
+                        break;
 
-                if(lex.Type == LexemeType.Operator)
-                {
-                    ProcessOperatorLexem(lex, commands, lexStack);
-                    continue;
-                }
+                    case LexemeType.OpenBracket:
+                        ProcessOpenBracketLexem(lex, commands, lexStack);
+                        break;
 
-                throw new NotSupportedException("Неизвестный тип лексемы " + lex.Type);
+                    case LexemeType.CloseBracket:
+                        ProcessCloseBracketLexem(lex, commands, lexStack);
+                        break;
+
+                    case LexemeType.Operator:
+                        ProcessOperatorLexem(lex, commands, lexStack);
+                        break;
+
+                    default:
+                        throw new NotSupportedException("Неизвестный тип лексемы " + lex.Type);
+                }
             }
 
-            while(lexStack.Count > 0)
-            {
-                var lex = lexStack.Pop();
-                if(lex.Type == LexemeType.OpenBracket)
-                    throw new ArgumentException("Обнаружена непарная открывающая скобка");
-
-                //Перекидываем операции в результат
-                if (lex.Type == LexemeType.Operator)
-                    commands.Add(GetOperation(lex.Value).GetCommand());
-            }
+            ProcessRemainingLexem(commands, lexStack);
 
             return commands.ToArray();
         }
@@ -102,7 +91,7 @@ namespace Rusakov.Calc
         //Если токен — число, то добавить его в очередь вывода.
         protected void ProcessNumberLexem(Lexeme lexeme, List<ICommand> commands, Stack<Lexeme> lexemeStack)
         {
-            if(lexeme.Type != LexemeType.Number)
+            if (lexeme.Type != LexemeType.Number)
                 throw new ArgumentException("lexeme");
 
             decimal number;
@@ -173,9 +162,18 @@ namespace Rusakov.Calc
         //Пока есть токены операторы в стеке:
         //Если токен оператор на вершине стека — скобка, то в выражении присутствует незакрытая скобка.
         //Переложить оператор из стека в выходную очередь.
-        protected void ProcessRemainingLexem(Lexeme lexeme, List<ICommand> commands, Stack<Lexeme> lexemeStack)
+        protected void ProcessRemainingLexem(List<ICommand> commands, Stack<Lexeme> lexemeStack)
         {
+            while (lexemeStack.Count > 0)
+            {
+                var lex = lexemeStack.Pop();
+                if (lex.Type == LexemeType.OpenBracket)
+                    throw new ArgumentException("Обнаружена непарная открывающая скобка");
 
+                //Перекидываем операции в результат
+                if (lex.Type == LexemeType.Operator)
+                    commands.Add(GetOperation(lex.Value).GetCommand());
+            }
         }
     }
 }

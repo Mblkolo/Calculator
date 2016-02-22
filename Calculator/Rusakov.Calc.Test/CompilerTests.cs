@@ -11,139 +11,6 @@ namespace Rusakov.Calc.Test
     [TestFixture]
     class CompilerTests
     {
-        //[Test]
-        //public void ComlipeNumber()
-        //{
-        //    var compiler = new Compiler();
-        //    var lexemes = new[] { new Lexeme("23.2", LexemeType.Number) };
-
-        //    var commands = compiler.Compile(lexemes);
-
-        //    Assert.That(commands.Length, Is.EqualTo(1));
-        //    Assert.That(commands[0], Is.TypeOf<PushCommand>());
-        //    Assert.That((commands[0] as PushCommand).Value, Is.EqualTo(23.2m));
-        //}
-
-        //[Test]
-        //public void FailComlipeNumber()
-        //{
-        //    var compiler = new Compiler();
-        //    var lexemes = new[] { new Lexeme("23..2", LexemeType.Number) };
-
-        //    TestDelegate commands = () => compiler.Compile(lexemes);
-
-        //    Assert.Throws<ArgumentException>(commands);
-        //}
-
-        //[Test]
-        //public void ComlipeBrackets()
-        //{
-        //    var compiler = new Compiler();
-        //    var lexemes = new[] { 
-        //        new Lexeme("(", LexemeType.OpenBracket),
-        //        new Lexeme("1", LexemeType.Number),
-        //        new Lexeme(")", LexemeType.CloseBracket),
-        //    };
-
-        //    var commands = compiler.Compile(lexemes);
-
-        //    Assert.That(commands.Length, Is.EqualTo(1));
-        //    Assert.That(commands[0], Is.TypeOf<PushCommand>());
-        //    Assert.That((commands[0] as PushCommand).Value, Is.EqualTo(1m));
-        //}
-
-        //[Test]
-        //public void EmptyBracketsNotAllowed()
-        //{
-        //    var compiler = new Compiler();
-        //    var lexemes = new[] { 
-        //        new Lexeme("(", LexemeType.OpenBracket),
-        //        new Lexeme(")", LexemeType.CloseBracket)
-        //    };
-        //    TestDelegate commands = () => compiler.Compile(lexemes);
-
-        //    Assert.Throws<ArgumentException>(commands);
-        //}
-
-        //[Test]
-        //public void MultiplyBracketsNotAllowed()
-        //{
-        //    var compiler = new Compiler();
-        //    var lexemes = new[] { 
-        //        new Lexeme("(", LexemeType.OpenBracket),
-        //        new Lexeme("(", LexemeType.OpenBracket),
-        //        new Lexeme("1", LexemeType.Number),
-        //        new Lexeme(")", LexemeType.CloseBracket),
-        //        new Lexeme(")", LexemeType.CloseBracket)
-        //    };
-
-        //    TestDelegate commands = () => compiler.Compile(lexemes);
-
-        //    Assert.Throws<ArgumentException>(commands);
-        //}
-
-        //[Test]
-        //public void NotBalansedCloseBrackets()
-        //{
-        //    var compiler = new Compiler();
-        //    var lexemes = new[] { 
-        //        new Lexeme("(", LexemeType.OpenBracket),
-        //        new Lexeme("1", LexemeType.Number),
-        //        new Lexeme(")", LexemeType.CloseBracket),
-        //        new Lexeme(")", LexemeType.CloseBracket)
-        //    };
-
-        //    TestDelegate commands = () => compiler.Compile(lexemes);
-
-        //    Assert.Throws<ArgumentException>(commands);
-        //}
-
-        //[Test]
-        //public void NotBalansedOpenBrackets()
-        //{
-        //    var compiler = new Compiler();
-        //    var lexemes = new[] { 
-        //        new Lexeme("(", LexemeType.OpenBracket),
-        //        new Lexeme("(", LexemeType.OpenBracket),
-        //        new Lexeme("1", LexemeType.Number),
-        //        new Lexeme(")", LexemeType.CloseBracket)
-        //    };
-
-        //    TestDelegate commands = () => compiler.Compile(lexemes);
-
-        //    Assert.Throws<ArgumentException>(commands);
-        //}
-
-        //[Test]
-        //public void Priory()
-        //{
-        //    var operations = new IOperation[] 
-        //    {
-        //        new MockOperation('+', true, 1),
-        //        new MockOperation('*', true, 2),
-        //    };
-        //    var compiler = new Compiler(operations);
-        //    var lexemes = new[] { 
-        //        new Lexeme("1", LexemeType.Number),
-        //        new Lexeme("+", LexemeType.Operator),
-        //        new Lexeme("2", LexemeType.Number),
-        //        new Lexeme("*", LexemeType.Operator),
-        //        new Lexeme("3", LexemeType.Number)
-        //    };
-
-        //    var commands = compiler.Compile(lexemes);
-
-        //    Assert.That(commands.Length, Is.EqualTo(5));
-        //    Assert.That(commands[3], Is.TypeOf<MockCommand>());
-        //    Assert.That(commands[4], Is.TypeOf<MockCommand>());
-
-        //    Assert.That((commands[3] as MockCommand).Operation.Operator, Is.EqualTo('*'));
-        //    Assert.That((commands[4] as MockCommand).Operation.Operator, Is.EqualTo('+'));
-        //}
-
-
-
-
         [Test]
         public void ProcessNumberLexem_WithoutNumberLexem_FailProcess()
         {
@@ -344,6 +211,49 @@ namespace Rusakov.Calc.Test
         }
 
 
+        [Test]
+        public void ProcessRemainingLexem_WithEmptyStack_Nothing()
+        {
+            var compiller = new OpenCompiler();
+            var commands = new List<ICommand>();
+            var stack = new Stack<Lexeme>();
+
+            compiller.ProcessRemainingLexem(commands, stack);
+
+            Assert.That(commands.Count, Is.EqualTo(0));
+            Assert.That(stack.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void ProcessRemainingLexem_WithOpenBracketInStack_FailProcess()
+        {
+            var compiller = new OpenCompiler();
+            var commands = new List<ICommand>();
+            var stack = new Stack<Lexeme>();
+            stack.Push(new Lexeme("(", LexemeType.OpenBracket));
+
+            TestDelegate process = () => compiller.ProcessRemainingLexem(commands, stack);
+
+            Assert.Throws<ArgumentException>(process);
+        }
+
+        [Test]
+        public void ProcessRemainingLexem_WithOperatorsInStack_OperatorsInOutCommand()
+        {
+            var operations = new IOperation[] { new MockOperation('+', true, 1) };
+            var compiller = new OpenCompiler(operations);
+            var commands = new List<ICommand>();
+            var stack = new Stack<Lexeme>();
+            stack.Push(new Lexeme("+", LexemeType.Operator));
+            stack.Push(new Lexeme("+", LexemeType.Operator));
+
+            compiller.ProcessRemainingLexem(commands, stack);
+
+            Assert.That(commands.Count, Is.EqualTo(2));
+            Assert.That(stack.Count, Is.EqualTo(0));
+        }
+
+
 
         class MockOperation : IOperation
         {
@@ -414,29 +324,12 @@ namespace Rusakov.Calc.Test
             {
                 base.ProcessOperatorLexem(lexeme, commands, lexemeStack);
             }
+
+            public new void ProcessRemainingLexem(List<ICommand> commands, Stack<Lexeme> lexemeStack)
+            {
+                base.ProcessRemainingLexem(commands, lexemeStack);
+            }
+
         }
-
-        //Либо оператор op лево-ассоциативен и его приоритет меньше чем у оператора topStackOp либо равен,
-        //или оператор op право-ассоциативен и его приоритет меньше чем у topStackOp
-        //static object[] CompareOperationCases =
-        //{
-        //    new object[] { new OperationStub('+', false, true, 2), new OperationStub('-', false, true, 1), false },
-        //    new object[] { new OperationStub('+', false, true, 2), new OperationStub('-', false, true, 2), true},
-        //    new object[] { new OperationStub('+', false, true, 2), new OperationStub('-', false, true, 3), true},
-        //    new object[] { new OperationStub('+', false, false, 2), new OperationStub('-', false, true, 1), false },
-        //    new object[] { new OperationStub('+', false, false, 2), new OperationStub('-', false, true, 2), false},
-        //    new object[] { new OperationStub('+', false, false, 2), new OperationStub('-', false, true, 3), true},
-        //};
-
-
-        //[Test, TestCaseSource("CompareOperationCases")]
-        //public void CompareOperation(IOperation op, IOperation topStackOp, bool result)
-        //{
-        //    var parser = new PublicParser(new Dictionary<char, IOperation>());
-
-        //    bool res = parser.CompareOperation(op, topStackOp);
-
-        //    Assert.That(res, Is.EqualTo(result));
-        //}
     }
 }
