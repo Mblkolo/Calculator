@@ -216,6 +216,58 @@ namespace Rusakov.Calc.Test
             Assert.That(stack.Peek(), Is.SameAs(lexeme));
         }
 
+        //Если токен — закрывающая скобка:
+        //Пока токен на вершине стека не является открывающей скобкой, перекладывать операторы из стека в выходную очередь.
+        //Выкинуть открывающую скобку из стека, но не добавлять в очередь вывода.
+        //Если стек закончился до того, как был встречен токен открывающая скобка, то в выражении пропущена скобка.
+        [Test]
+        public void ProcessCloseBracketLexem_WithoutCloseBracketLexem_FailProcess()
+        {
+            var compiller = new OpenCompiler();
+            var lexeme = new Lexeme("2.0", LexemeType.Number);
+            var commands = new List<ICommand>();
+            var stack = new Stack<Lexeme>();
+
+            TestDelegate process = () => compiller.ProcessCloseBracketLexem(lexeme, commands, stack);
+
+            Assert.Throws<ArgumentException>(process);
+        }
+
+        [Test]
+        public void ProcessCloseBracketLexem_WithsCloseBracketLexem_OperatorsInOutCommands()
+        {
+            var operations = new IOperation[] { new MockOperation('+', true, 1) };
+            var compiller = new OpenCompiler(operations);
+            var lexeme = new Lexeme(")", LexemeType.CloseBracket);
+            var commands = new List<ICommand>();
+            var stack = new Stack<Lexeme>();
+            stack.Push(new Lexeme("(", LexemeType.OpenBracket));
+            stack.Push(new Lexeme("+", LexemeType.Operator));
+
+            compiller.ProcessCloseBracketLexem(lexeme, commands, stack);
+
+            Assert.That(commands.Count, Is.EqualTo(1));
+            Assert.That(commands[0], Is.TypeOf<MockCommand>());
+
+            Assert.That(stack.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void ProcessCloseBracketLexem_WithoutOpenBracketInStack_FailProcess()
+        {
+            var operations = new IOperation[] { new MockOperation('+', true, 1) };
+            var compiller = new OpenCompiler(operations);
+            var lexeme = new Lexeme(")", LexemeType.CloseBracket);
+            var commands = new List<ICommand>();
+            var stack = new Stack<Lexeme>();
+            //stack.Push(new Lexeme("(", LexemeType.OpenBracket));
+            stack.Push(new Lexeme("+", LexemeType.Operator));
+
+            TestDelegate process = () => compiller.ProcessCloseBracketLexem(lexeme, commands, stack);
+
+            Assert.Throws<ArgumentException>(process);
+        }
+
 
 
         class MockOperation : IOperation
@@ -259,6 +311,15 @@ namespace Rusakov.Calc.Test
 
         class OpenCompiler : Compiler
         {
+            public OpenCompiler()
+            {
+            }
+
+            public OpenCompiler(IOperation[] operations)
+                : base(operations)
+            {
+            }
+
             public new void ProcessNumberLexem(Lexeme lexeme, List<ICommand> commands, Stack<Lexeme> lexemeStack)
             {
                 base.ProcessNumberLexem(lexeme, commands, lexemeStack);
@@ -267,6 +328,11 @@ namespace Rusakov.Calc.Test
             public new void ProcessOpenBracketLexem(Lexeme lexeme, List<ICommand> commands, Stack<Lexeme> lexemeStack)
             {
                 base.ProcessOpenBracketLexem(lexeme, commands, lexemeStack);
+            }
+
+            public new void ProcessCloseBracketLexem(Lexeme lexeme, List<ICommand> commands, Stack<Lexeme> lexemeStack)
+            {
+                base.ProcessCloseBracketLexem(lexeme, commands, lexemeStack);
             }
 
         }

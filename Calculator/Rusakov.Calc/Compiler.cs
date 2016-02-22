@@ -47,19 +47,7 @@ namespace Rusakov.Calc
                 }
                 if(lex.Type == LexemeType.CloseBracket)
                 {
-                    while (lexStack.Count > 0 && lexStack.Peek().Type != LexemeType.OpenBracket)
-                    {
-                        //Перекидываем операции в результат
-                        var l = lexStack.Pop();
-                        if (l.Type == LexemeType.Operator)
-                            commands.Add(GetOperation(l.Value).GetCommand());
-                    }
-
-                    if (lexStack.Count == 0 || lexStack.Peek().Type != LexemeType.OpenBracket)
-                        throw new ArgumentException("Обнаружена непарная закрывающая скобка");
-
-                    lexStack.Pop();
-
+                    ProcessCloseBracketLexem(lex, commands, lexStack);
                     continue;
                 }
 
@@ -150,7 +138,21 @@ namespace Rusakov.Calc
         //Если стек закончился до того, как был встречен токен открывающая скобка, то в выражении пропущена скобка.
         protected void ProcessCloseBracketLexem(Lexeme lexeme, List<ICommand> commands, Stack<Lexeme> lexemeStack)
         {
+            if (lexeme.Type != LexemeType.CloseBracket)
+                throw new ArgumentException("lexeme");
 
+            while (lexemeStack.Count > 0 && lexemeStack.Peek().Type != LexemeType.OpenBracket)
+            {
+                //Перекидываем операции в результат
+                var l = lexemeStack.Pop();
+                if (l.Type == LexemeType.Operator)
+                    commands.Add(GetOperation(l.Value).GetCommand());
+            }
+
+            if (lexemeStack.Count == 0 || lexemeStack.Peek().Type != LexemeType.OpenBracket)
+                throw new ArgumentException("Обнаружена непарная закрывающая скобка");
+
+            lexemeStack.Pop();
         }
 
         //Если токен — оператор op1, то:
