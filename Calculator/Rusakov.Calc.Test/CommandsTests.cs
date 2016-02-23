@@ -145,5 +145,55 @@ namespace Rusakov.Calc.Test
             var exeption = Assert.Throws<CalculationException>(action);
             Assert.That(exeption.Message, Is.EqualTo("Обнаружено деление ноль"));
         }
+
+        [Test]
+        public void UnaryPlusCommand_WithoutNumberInStack_FailExecute()
+        {
+            var command = new UnaryPlusCommand();
+            var stack = new Stack<decimal>();
+
+            TestDelegate action = () => command.Execute(stack);
+
+            var exeption = Assert.Throws<CalculationException>(action);
+            Assert.That(exeption.Message, Is.EqualTo("Отсутсвует число в операции вида (+a)"));
+        }
+
+        [Test]
+        public void UnaryPlusCommand_WithOneNumberInStack_StackWithoutChange()
+        {
+            var command = new UnaryPlusCommand();
+            var stack = new Stack<decimal>();
+            stack.Push(1);
+
+            command.Execute(stack);
+
+            Assert.That(stack.Count, Is.EqualTo(1));
+            Assert.That(stack.Peek(), Is.EqualTo(1m));
+        }
+
+        [Test]
+        public void UnaryMinusCommand_WithoutNumberInStack_FailExecute()
+        {
+            var command = new UnaryMinusCommand();
+            var stack = new Stack<decimal>();
+
+            TestDelegate action = () => command.Execute(stack);
+
+            var exeption = Assert.Throws<CalculationException>(action);
+            Assert.That(exeption.Message, Is.EqualTo("Отсутсвует число в операции вида (-a)"));
+        }
+
+        [Test]
+        public void UnaryMinusCommand_WithOneNumberInStack_NumberisInvert()
+        {
+            var command = new UnaryMinusCommand();
+            var stack = new Stack<decimal>();
+            stack.Push(1);
+
+            command.Execute(stack);
+
+            Assert.That(stack.Count, Is.EqualTo(1));
+            Assert.That(stack.Peek(), Is.EqualTo(-1m));
+        }
     }
 }

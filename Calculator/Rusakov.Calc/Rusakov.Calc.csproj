@@ -43,8 +43,10 @@
   <ItemGroup>
     <Compile Include="Calculator.cs" />
     <Compile Include="Commands\DivideCommand.cs" />
+    <Compile Include="Commands\UnaryMinusCommand.cs" />
     <Compile Include="Commands\MinusCommand.cs" />
     <Compile Include="Commands\MultiplyCommand.cs" />
+    <Compile Include="Commands\UnaryPlusCommand.cs" />
     <Compile Include="Commands\PlusCommand.cs" />
     <Compile Include="Commands\PushCommand.cs" />
     <Compile Include="Compiler.cs" />
@@ -56,8 +58,10 @@
     <Compile Include="Interfaces\CalculationException.cs" />
     <Compile Include="Lexer.cs" />
     <Compile Include="Operations\DivideOperation.cs" />
+    <Compile Include="Operations\UnaryMinusOperation.cs" />
     <Compile Include="Operations\MinusOperation.cs" />
     <Compile Include="Operations\MultiplyOperation.cs" />
+    <Compile Include="Operations\UnaryPlusOperation.cs" />
     <Compile Include="Operations\PlusOperation.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

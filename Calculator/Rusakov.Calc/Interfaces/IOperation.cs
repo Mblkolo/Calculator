@@ -12,11 +12,16 @@ namespace Rusakov.Calc.Interfaces
     {
         char Operator { get; }
 
-        //#warning IsUnary не реализовано
-        //bool IsUnary { get; }
+        bool IsUnary { get; }
 
+        /// <summary>
+        /// Левоассоциативность
+        /// </summary>
         bool IsLeft { get; }
 
+        /// <summary>
+        /// Приоритет, чем выше, тем выше
+        /// </summary>
         byte Priority { get; }
 
         /// <summary>
