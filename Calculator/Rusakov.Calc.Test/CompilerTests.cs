@@ -254,6 +254,18 @@ namespace Rusakov.Calc.Test
             Assert.That(stack.Count, Is.EqualTo(0));
         }
 
+        [Test]
+        public void ProcessRemainingLexem_WithUnknownOperator_FailProcess()
+        {
+            var compiller = new OpenCompiler();
+            var commands = new List<ICommand>();
+            var stack = new Stack<Lexeme>();
+            stack.Push(new Lexeme("+", LexemeType.Operator));
+
+            TestDelegate process = () => compiller.ProcessRemainingLexem(commands, stack);
+
+            Assert.Throws<CalculationException>(process);
+        }
 
 
         class MockOperation : IOperation

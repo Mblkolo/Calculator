@@ -84,7 +84,7 @@ namespace Rusakov.Calc
         {
             IOperation op;
             if (!operations.TryGetValue(operatorName, out op))
-                throw new ArgumentException("Неизвестная операция " + operatorName);
+                throw new CalculationException("Неизвестная операция " + operatorName);
 
             return op;
         }
@@ -97,7 +97,7 @@ namespace Rusakov.Calc
 
             decimal number;
             if (!decimal.TryParse(lexeme.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out number))
-                throw new ArgumentException("Не удалось преобразовать в число " + lexeme.Value);
+                throw new CalculationException("Не удалось преобразовать в число " + lexeme.Value);
 
             commands.Add(new PushCommand(number));
         }
@@ -129,7 +129,7 @@ namespace Rusakov.Calc
             }
 
             if (lexemeStack.Count == 0 || lexemeStack.Peek().Type != LexemeType.OpenBracket)
-                throw new ArgumentException("Обнаружена непарная закрывающая скобка");
+                throw new CalculationException("Обнаружена непарная закрывающая скобка");
 
             lexemeStack.Pop();
         }
@@ -169,7 +169,7 @@ namespace Rusakov.Calc
             {
                 var lex = lexemeStack.Pop();
                 if (lex.Type == LexemeType.OpenBracket)
-                    throw new ArgumentException("Обнаружена непарная открывающая скобка");
+                    throw new CalculationException("Обнаружена непарная открывающая скобка");
 
                 //Перекидываем операции в результат
                 if (lex.Type == LexemeType.Operator)
