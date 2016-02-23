@@ -106,7 +106,7 @@ namespace Rusakov.Calc.Test
             var commands = new List<ICommand>();
             var stack = new Stack<Lexeme>();
             stack.Push(new Lexeme("(", LexemeType.OpenBracket));
-            stack.Push(new Lexeme("+", LexemeType.Operator));
+            stack.Push(new Lexeme("+", LexemeType.BinaryOperator));
 
             compiller.ProcessCloseBracketLexem(lexeme, commands, stack);
 
@@ -125,7 +125,7 @@ namespace Rusakov.Calc.Test
             var commands = new List<ICommand>();
             var stack = new Stack<Lexeme>();
             //stack.Push(new Lexeme("(", LexemeType.OpenBracket)); без закрывающей скобки
-            stack.Push(new Lexeme("+", LexemeType.Operator));
+            stack.Push(new Lexeme("+", LexemeType.BinaryOperator));
 
             TestDelegate process = () => compiller.ProcessCloseBracketLexem(lexeme, commands, stack);
 
@@ -151,7 +151,7 @@ namespace Rusakov.Calc.Test
         {
             var operations = new IOperation[] { new MockOperation('+', true, 1) };
             var compiller = new OpenCompiler(operations);
-            var lexeme = new Lexeme("+", LexemeType.Operator);
+            var lexeme = new Lexeme("+", LexemeType.BinaryOperator);
             var commands = new List<ICommand>();
             var stack = new Stack<Lexeme>();
 
@@ -175,12 +175,12 @@ namespace Rusakov.Calc.Test
 
 
             var compiller = new OpenCompiler(operations);
-            var lexeme = new Lexeme("+", LexemeType.Operator);
+            var lexeme = new Lexeme("+", LexemeType.BinaryOperator);
             var commands = new List<ICommand>();
             var stack = new Stack<Lexeme>();
-            stack.Push(new Lexeme("-", LexemeType.Operator));
-            stack.Push(new Lexeme("+", LexemeType.Operator));
-            stack.Push(new Lexeme("*", LexemeType.Operator));
+            stack.Push(new Lexeme("-", LexemeType.BinaryOperator));
+            stack.Push(new Lexeme("+", LexemeType.BinaryOperator));
+            stack.Push(new Lexeme("*", LexemeType.BinaryOperator));
 
             compiller.ProcessOperatorLexem(lexeme, commands, stack);
 
@@ -198,12 +198,12 @@ namespace Rusakov.Calc.Test
             };
 
             var compiller = new OpenCompiler(operations);
-            var lexeme = new Lexeme("+", LexemeType.Operator);
+            var lexeme = new Lexeme("+", LexemeType.BinaryOperator);
             var commands = new List<ICommand>();
             var stack = new Stack<Lexeme>();
-            stack.Push(new Lexeme("-", LexemeType.Operator));
-            stack.Push(new Lexeme("+", LexemeType.Operator));
-            stack.Push(new Lexeme("*", LexemeType.Operator));
+            stack.Push(new Lexeme("-", LexemeType.BinaryOperator));
+            stack.Push(new Lexeme("+", LexemeType.BinaryOperator));
+            stack.Push(new Lexeme("*", LexemeType.BinaryOperator));
 
             compiller.ProcessOperatorLexem(lexeme, commands, stack);
 
@@ -245,8 +245,8 @@ namespace Rusakov.Calc.Test
             var compiller = new OpenCompiler(operations);
             var commands = new List<ICommand>();
             var stack = new Stack<Lexeme>();
-            stack.Push(new Lexeme("+", LexemeType.Operator));
-            stack.Push(new Lexeme("+", LexemeType.Operator));
+            stack.Push(new Lexeme("+", LexemeType.BinaryOperator));
+            stack.Push(new Lexeme("+", LexemeType.BinaryOperator));
 
             compiller.ProcessRemainingLexem(commands, stack);
 
@@ -260,7 +260,7 @@ namespace Rusakov.Calc.Test
             var compiller = new OpenCompiler();
             var commands = new List<ICommand>();
             var stack = new Stack<Lexeme>();
-            stack.Push(new Lexeme("+", LexemeType.Operator));
+            stack.Push(new Lexeme("+", LexemeType.BinaryOperator));
 
             TestDelegate process = () => compiller.ProcessRemainingLexem(commands, stack);
 

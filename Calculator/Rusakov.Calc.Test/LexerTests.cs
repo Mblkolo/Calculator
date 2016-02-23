@@ -15,8 +15,8 @@ namespace Rusakov.Calc.Test
         [TestCase("123...23", LexemeType.Number)] //Формат числа не проблема лексера
         [TestCase("(", LexemeType.OpenBracket)]
         [TestCase(")", LexemeType.CloseBracket)]
-        [TestCase("+", LexemeType.Operator)]
-        [TestCase("p", LexemeType.Operator)]
+        [TestCase("+", LexemeType.BinaryOperator)]
+        [TestCase("p", LexemeType.BinaryOperator)]
         public void Parse_SimpleLexeme_LexemeEqualsInputText(string text, LexemeType type)
         {
             var lexer = new Lexer();
@@ -51,9 +51,8 @@ namespace Rusakov.Calc.Test
             Assert.That(lexemes.Length, Is.EqualTo(2));
             Assert.That(lexemes[0].Type, Is.EqualTo(LexemeType.Number));
             Assert.That(lexemes[0].Value, Is.EqualTo("1"));
-            Assert.That(lexemes[1].Type, Is.EqualTo(LexemeType.Operator));
+            Assert.That(lexemes[1].Type, Is.EqualTo(LexemeType.BinaryOperator));
             Assert.That(lexemes[1].Value, Is.EqualTo("+"));
-
         }
 
         [Test]
@@ -68,16 +67,16 @@ namespace Rusakov.Calc.Test
             Assert.That(lexemes[0].Type, Is.EqualTo(LexemeType.Number));
             Assert.That(lexemes[0].Value, Is.EqualTo("1.23"));
 
-            Assert.That(lexemes[1].Type, Is.EqualTo(LexemeType.Operator));
-            Assert.That(lexemes[2].Type, Is.EqualTo(LexemeType.Operator));
-            Assert.That(lexemes[3].Type, Is.EqualTo(LexemeType.Operator));
+            Assert.That(lexemes[1].Type, Is.EqualTo(LexemeType.BinaryOperator));
+            Assert.That(lexemes[2].Type, Is.EqualTo(LexemeType.BinaryOperator));
+            Assert.That(lexemes[3].Type, Is.EqualTo(LexemeType.BinaryOperator));
             Assert.That(lexemes[4].Type, Is.EqualTo(LexemeType.Number));
             Assert.That(lexemes[5].Type, Is.EqualTo(LexemeType.CloseBracket));
-            Assert.That(lexemes[6].Type, Is.EqualTo(LexemeType.Operator));
+            Assert.That(lexemes[6].Type, Is.EqualTo(LexemeType.BinaryOperator));
             Assert.That(lexemes[7].Type, Is.EqualTo(LexemeType.CloseBracket));
             Assert.That(lexemes[8].Type, Is.EqualTo(LexemeType.OpenBracket));
             Assert.That(lexemes[9].Type, Is.EqualTo(LexemeType.CloseBracket));
-            Assert.That(lexemes[10].Type, Is.EqualTo(LexemeType.Operator));
+            Assert.That(lexemes[10].Type, Is.EqualTo(LexemeType.BinaryOperator));
             Assert.That(lexemes[11].Type, Is.EqualTo(LexemeType.Number));
         }
     }

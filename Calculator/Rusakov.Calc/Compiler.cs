@@ -19,7 +19,6 @@ namespace Rusakov.Calc
                 throw new ArgumentNullException("operations");
 
             this._operations = operations.ToDictionary(x => new String(x.Operator, 1));
-
         }
 
         public Compiler()
@@ -50,7 +49,7 @@ namespace Rusakov.Calc
                         ProcessCloseBracketLexem(lex, commands, lexStack);
                         break;
 
-                    case LexemeType.Operator:
+                    case LexemeType.BinaryOperator:
                         ProcessOperatorLexem(lex, commands, lexStack);
                         break;
 
@@ -124,7 +123,7 @@ namespace Rusakov.Calc
             {
                 //Перекидываем операции в результат
                 var l = lexemeStack.Pop();
-                if (l.Type == LexemeType.Operator)
+                if (l.Type == LexemeType.BinaryOperator)
                     commands.Add(GetOperation(l.Value).GetCommand());
             }
 
@@ -142,11 +141,11 @@ namespace Rusakov.Calc
         //положить op1 в стек.
         protected void ProcessOperatorLexem(Lexeme lexeme, List<ICommand> commands, Stack<Lexeme> lexemeStack)
         {
-            if (lexeme.Type != LexemeType.Operator)
+            if (lexeme.Type != LexemeType.BinaryOperator)
                 throw new ArgumentException("lexeme");
 
             //Снимает часть лексем со стека
-            while (lexemeStack.Count > 0 && lexemeStack.Peek().Type == LexemeType.Operator)
+            while (lexemeStack.Count > 0 && lexemeStack.Peek().Type == LexemeType.BinaryOperator)
             {
                 string topStackOperation = lexemeStack.Peek().Value;
                 if (!CompareLexem(lexeme.Value, topStackOperation))
@@ -172,7 +171,7 @@ namespace Rusakov.Calc
                     throw new CalculationException("Обнаружена непарная открывающая скобка");
 
                 //Перекидываем операции в результат
-                if (lex.Type == LexemeType.Operator)
+                if (lex.Type == LexemeType.BinaryOperator)
                     commands.Add(GetOperation(lex.Value).GetCommand());
             }
         }

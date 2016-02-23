@@ -20,7 +20,8 @@ namespace Rusakov.Calc.Interfaces
 
     internal enum LexemeType
     {
-        Operator,
+        BinaryOperator,
+        UnaryOperator,
         Number,
         OpenBracket,
         CloseBracket

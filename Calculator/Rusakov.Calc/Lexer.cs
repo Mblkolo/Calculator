@@ -46,7 +46,7 @@ namespace Rusakov.Calc
                 }
 
                 //Любой другой символ считается оператором
-                lexemes.Add(new Lexeme(new String(c, 1), LexemeType.Operator));
+                lexemes.Add(new Lexeme(new String(c, 1), LexemeType.BinaryOperator));
                 continue;
             }
 

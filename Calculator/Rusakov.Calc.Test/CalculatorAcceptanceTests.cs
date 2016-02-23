@@ -38,11 +38,16 @@ namespace Rusakov.Calc.Test
             new object[] { "5*2", 10m },
             new object[] { "5/2", 2.5m },
             new object[] { "(((3)))", 3m },
-            new object[] { "()5()*()2()", 10m }, //Это странно, да
+            new object[] { "()5()*()2()", 10m }, //пустые выражения не приводят к ошибкам
             new object[] { "1 + 2 * 3", 7m },
             new object[] { "1 * 2 + 3", 5m },
             new object[] { "3 * 2 / 3", 2m },
             new object[] { "4 / 2 / 2", 1m },
+            new object[] { "-34", -34m },
+            new object[] { "+-+-34", 34m },
+            new object[] { "1+-2", -1m },
+            new object[] { "1+(-2)", -1m },
+            new object[] { "1 () + () -2", -1m },
         };
 
         [Test, TestCaseSource("CorrectExpressionSource")]
@@ -55,17 +60,17 @@ namespace Rusakov.Calc.Test
 
         [TestCase("")]
         [TestCase("  \t")]
-        [TestCase("(")]
-        [TestCase(")")]
-        [TestCase("(()")]
-        [TestCase("())")]
+        [TestCase("(1")]
+        [TestCase("1)")]
+        [TestCase("((1)")]
+        [TestCase("(1))")]
         [TestCase("+")]
         [TestCase("10 20")]
         [TestCase("1..34")]
         [TestCase("34 -")]
         [TestCase("1/0")]
         [TestCase("1/(1-1)")]
-        [TestCase("-34")]
+        [TestCase("(1+)-2")]
         public void IncorrectExpression(string expression)
         {
             TestDelegate action = () => _calc.Calculate(expression);
