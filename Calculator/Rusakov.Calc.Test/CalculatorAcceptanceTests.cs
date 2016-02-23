@@ -23,7 +23,9 @@ namespace Rusakov.Calc.Test
                 new PlusOperation(),
                 new MinusOperation(),
                 new MultiplyOperation(),
-                new DivideOperation()
+                new DivideOperation(),
+                new UnaryPlusOperation(),
+                new UnaryMinusOperation(),
             };
 
             var compiler = new Compiler(operations);
@@ -47,7 +49,7 @@ namespace Rusakov.Calc.Test
             new object[] { "+-+-34", 34m },
             new object[] { "1+-2", -1m },
             new object[] { "1+(-2)", -1m },
-            new object[] { "1 () + () -2", -1m },
+            new object[] { "1 () + ( -2)", -1m },
         };
 
         [Test, TestCaseSource("CorrectExpressionSource")]
@@ -71,11 +73,12 @@ namespace Rusakov.Calc.Test
         [TestCase("1/0")]
         [TestCase("1/(1-1)")]
         [TestCase("(1+)-2")]
+        [TestCase("1 () + () -2")]
         public void IncorrectExpression(string expression)
         {
             TestDelegate action = () => _calc.Calculate(expression);
 
-            Assert.Throws<CalculationException>(action);
+             Assert.Throws<CalculationException>(action);
         }
     }
 }

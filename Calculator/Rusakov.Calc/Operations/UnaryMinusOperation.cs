@@ -17,12 +17,12 @@ namespace Rusakov.Calc.Operations
 
         public bool IsUnary
         {
-            get { return false; }
+            get { return true; }
         }
 
         public bool IsLeft
         {
-            get { return true; }
+            get { return false; }
         }
 
         public byte Priority

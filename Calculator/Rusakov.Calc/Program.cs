@@ -50,7 +50,9 @@ namespace Rusakov.Calc
                 new PlusOperation(),
                 new MinusOperation(),
                 new MultiplyOperation(),
-                new DivideOperation()
+                new DivideOperation(),
+                new UnaryPlusOperation(),
+                new UnaryMinusOperation()
             };
 
             var compiler = new Compiler(operations);

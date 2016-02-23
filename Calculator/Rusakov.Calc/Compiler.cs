@@ -12,13 +12,15 @@ namespace Rusakov.Calc
     class Compiler : ICompiler
     {
         private Dictionary<string, IOperation> _operations;
+        private Dictionary<string, IOperation> _unaryOperations;
 
         public Compiler(IOperation[] operations)
         {
             if (operations == null)
                 throw new ArgumentNullException("operations");
 
-            this._operations = operations.ToDictionary(x => new String(x.Operator, 1));
+            this._operations = operations.Where(x => !x.IsUnary).ToDictionary(x => new String(x.Operator, 1));
+            this._unaryOperations = operations.Where(x => x.IsUnary).ToDictionary(x => new String(x.Operator, 1));
         }
 
         public Compiler()
@@ -50,6 +52,7 @@ namespace Rusakov.Calc
                         break;
 
                     case LexemeType.BinaryOperator:
+                    case LexemeType.UnaryOperator:
                         ProcessOperatorLexem(lex, commands, lexStack);
                         break;
 
@@ -65,10 +68,10 @@ namespace Rusakov.Calc
 
         //Либо оператор op лево-ассоциативен и его приоритет меньше чем у оператора topStackOp либо равен,
         //или оператор op право-ассоциативен и его приоритет меньше чем у topStackOp
-        protected bool CompareLexem(string opName, string topStackOpName)
+        protected bool CompareLexem(Lexeme opLexeme, Lexeme topStackLexeme)
         {
-            IOperation op = GetOperation(opName);
-            IOperation topStackOp = GetOperation(topStackOpName);
+            IOperation op = GetOperation(opLexeme);
+            IOperation topStackOp = GetOperation(topStackLexeme);
 
             if (op.IsLeft && op.Priority <= topStackOp.Priority)
                 return true;
@@ -79,13 +82,25 @@ namespace Rusakov.Calc
             return false;
         }
 
-        protected IOperation GetOperation(string operatorName)
+        protected IOperation GetOperation(Lexeme lexeme)
         {
-            IOperation op;
-            if (!_operations.TryGetValue(operatorName, out op))
-                throw new CalculationException("Неизвестная операция " + operatorName);
+            if (lexeme.Type == LexemeType.BinaryOperator)
+            {
+                IOperation op;
+                if (!_operations.TryGetValue(lexeme.Value, out op))
+                    throw new CalculationException("Неизвестная операция " + lexeme.Value);
+                return op;
+            }
 
-            return op;
+            if (lexeme.Type == LexemeType.UnaryOperator)
+            {
+                IOperation op;
+                if (!_unaryOperations.TryGetValue(lexeme.Value, out op))
+                    throw new CalculationException("Неизвестная операция " + lexeme.Value);
+                return op;
+            }
+
+            throw new ArgumentException("lexeme");
         }
 
         //Если токен — число, то добавить его в очередь вывода.
@@ -123,8 +138,8 @@ namespace Rusakov.Calc
             {
                 //Перекидываем операции в результат
                 var l = lexemeStack.Pop();
-                if (l.Type == LexemeType.BinaryOperator)
-                    commands.Add(GetOperation(l.Value).GetCommand());
+                if (IsOperation(l))
+                    commands.Add(GetOperation(l).GetCommand());
             }
 
             if (lexemeStack.Count == 0 || lexemeStack.Peek().Type != LexemeType.OpenBracket)
@@ -141,14 +156,14 @@ namespace Rusakov.Calc
         //положить op1 в стек.
         protected void ProcessOperatorLexem(Lexeme lexeme, List<ICommand> commands, Stack<Lexeme> lexemeStack)
         {
-            if (lexeme.Type != LexemeType.BinaryOperator)
+            if (!IsOperation(lexeme))
                 throw new ArgumentException("lexeme");
 
             //Снимает часть лексем со стека
-            while (lexemeStack.Count > 0 && lexemeStack.Peek().Type == LexemeType.BinaryOperator)
+            while (lexemeStack.Count > 0 && IsOperation(lexemeStack.Peek()))
             {
-                string topStackOperation = lexemeStack.Peek().Value;
-                if (!CompareLexem(lexeme.Value, topStackOperation))
+                Lexeme topStackOperation = lexemeStack.Peek();
+                if (!CompareLexem(lexeme, topStackOperation))
                     break;
 
                 lexemeStack.Pop();
@@ -171,9 +186,14 @@ namespace Rusakov.Calc
                     throw new CalculationException("Обнаружена непарная открывающая скобка");
 
                 //Перекидываем операции в результат
-                if (lex.Type == LexemeType.BinaryOperator)
-                    commands.Add(GetOperation(lex.Value).GetCommand());
+                if (IsOperation(lex))
+                    commands.Add(GetOperation(lex).GetCommand());
             }
+        }
+
+        private bool IsOperation(Lexeme lexeme)
+        {
+            return lexeme.Type == LexemeType.BinaryOperator || lexeme.Type == LexemeType.UnaryOperator;
         }
     }
 }

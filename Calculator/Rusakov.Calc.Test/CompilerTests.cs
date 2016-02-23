@@ -100,18 +100,20 @@ namespace Rusakov.Calc.Test
         [Test]
         public void ProcessCloseBracketLexem_WithsCloseBracketLexem_OperatorsInOutCommands()
         {
-            var operations = new IOperation[] { new MockOperation('+', true, 1) };
+            var operations = new IOperation[] { new MockOperation('+', true, 1), new MockOperation('+', false, 2, true) };
             var compiller = new OpenCompiler(operations);
             var lexeme = new Lexeme(")", LexemeType.CloseBracket);
             var commands = new List<ICommand>();
             var stack = new Stack<Lexeme>();
             stack.Push(new Lexeme("(", LexemeType.OpenBracket));
             stack.Push(new Lexeme("+", LexemeType.BinaryOperator));
+            stack.Push(new Lexeme("+", LexemeType.UnaryOperator));
 
             compiller.ProcessCloseBracketLexem(lexeme, commands, stack);
 
-            Assert.That(commands.Count, Is.EqualTo(1));
+            Assert.That(commands.Count, Is.EqualTo(2));
             Assert.That(commands[0], Is.TypeOf<MockCommand>());
+            Assert.That(commands[1], Is.TypeOf<MockCommand>());
 
             Assert.That(stack.Count, Is.EqualTo(0));
         }
@@ -165,50 +167,56 @@ namespace Rusakov.Calc.Test
 
 
         [Test]
-        public void ProcessOperatorLexem_WithLeftAssociative_LessOrEqualPrioryInOutCommand()
+        public void ProcessOperatorLexem_WithLeftAssociative_GreatOrEqualPrioryInOutCommand()
         {
             var operations = new IOperation[] {
                 new MockOperation('-', true, 1),
                 new MockOperation('+', true, 2),
+                new MockOperation('~', true, 2),
                 new MockOperation('*', true, 3),
+                new MockOperation('+', true, 4, true)
             };
 
 
             var compiller = new OpenCompiler(operations);
-            var lexeme = new Lexeme("+", LexemeType.BinaryOperator);
+            var lexeme = new Lexeme("~", LexemeType.BinaryOperator);
             var commands = new List<ICommand>();
             var stack = new Stack<Lexeme>();
             stack.Push(new Lexeme("-", LexemeType.BinaryOperator));
             stack.Push(new Lexeme("+", LexemeType.BinaryOperator));
             stack.Push(new Lexeme("*", LexemeType.BinaryOperator));
+            stack.Push(new Lexeme("+", LexemeType.UnaryOperator));
 
             compiller.ProcessOperatorLexem(lexeme, commands, stack);
 
-            Assert.That(commands.Count, Is.EqualTo(2)); // * и +
-            Assert.That(stack.Count, Is.EqualTo(2)); // - и +
+            Assert.That(commands.Count, Is.EqualTo(3)); // +, * и +
+            Assert.That(stack.Count, Is.EqualTo(2)); // - и ~
         }
 
         [Test]
-        public void ProcessOperatorLexem_WithRightAssociative_LessPrioryInOutCommand()
+        public void ProcessOperatorLexem_WithRightAssociative_GreatPrioryInOutCommand()
         {
             var operations = new IOperation[] {
                 new MockOperation('-', false, 1),
                 new MockOperation('+', false, 2),
+                new MockOperation('~', false, 2),
                 new MockOperation('*', false, 3),
+                new MockOperation('+', true, 4, true)
             };
 
             var compiller = new OpenCompiler(operations);
-            var lexeme = new Lexeme("+", LexemeType.BinaryOperator);
+            var lexeme = new Lexeme("~", LexemeType.BinaryOperator);
             var commands = new List<ICommand>();
             var stack = new Stack<Lexeme>();
             stack.Push(new Lexeme("-", LexemeType.BinaryOperator));
             stack.Push(new Lexeme("+", LexemeType.BinaryOperator));
             stack.Push(new Lexeme("*", LexemeType.BinaryOperator));
+            stack.Push(new Lexeme("+", LexemeType.UnaryOperator));
 
             compiller.ProcessOperatorLexem(lexeme, commands, stack);
 
-            Assert.That(commands.Count, Is.EqualTo(1)); // -
-            Assert.That(stack.Count, Is.EqualTo(3)); // *, + и +
+            Assert.That(commands.Count, Is.EqualTo(2)); // + и *
+            Assert.That(stack.Count, Is.EqualTo(3)); // -, + и ~
         }
 
 
@@ -241,12 +249,12 @@ namespace Rusakov.Calc.Test
         [Test]
         public void ProcessRemainingLexem_WithOperatorsInStack_OperatorsInOutCommand()
         {
-            var operations = new IOperation[] { new MockOperation('+', true, 1) };
+            var operations = new IOperation[] { new MockOperation('+', true, 1), new MockOperation('+', false, 2, true) };
             var compiller = new OpenCompiler(operations);
             var commands = new List<ICommand>();
             var stack = new Stack<Lexeme>();
             stack.Push(new Lexeme("+", LexemeType.BinaryOperator));
-            stack.Push(new Lexeme("+", LexemeType.BinaryOperator));
+            stack.Push(new Lexeme("+", LexemeType.UnaryOperator));
 
             compiller.ProcessRemainingLexem(commands, stack);
 
@@ -278,10 +286,10 @@ namespace Rusakov.Calc.Test
 
             public byte Priority { get; set; }
 
-            public MockOperation(char op, bool isLeft, byte priory)
+            public MockOperation(char op, bool isLeft, byte priory, bool isUnary = false)
             {
                 Operator = op;
-                //IsUnary = IsUnary;
+                IsUnary = isUnary;
                 IsLeft = isLeft;
                 Priority = priory;
             }
