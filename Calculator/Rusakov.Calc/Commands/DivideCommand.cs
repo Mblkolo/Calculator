@@ -16,8 +16,17 @@ namespace Rusakov.Calc.Commands
 
             var a = state.Pop();
             var b = state.Pop();
-            var res = b / a;
-            state.Push(res);
+
+            try
+            {
+                var res = b / a;
+                state.Push(res);
+                return;
+            }
+            catch(DivideByZeroException)
+            {
+                throw new CalculationException("Обнаружено деление ноль");
+            }
         }
     }
 }

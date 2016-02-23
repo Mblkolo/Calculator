@@ -11,14 +11,14 @@ namespace Rusakov.Calc
 {
     class Compiler : ICompiler
     {
-        private Dictionary<string, IOperation> operations;
+        private Dictionary<string, IOperation> _operations;
 
         public Compiler(IOperation[] operations)
         {
             if (operations == null)
                 throw new ArgumentNullException("operations");
 
-            this.operations = operations.ToDictionary(x => new String(x.Operator, 1));
+            this._operations = operations.ToDictionary(x => new String(x.Operator, 1));
 
         }
 
@@ -83,7 +83,7 @@ namespace Rusakov.Calc
         protected IOperation GetOperation(string operatorName)
         {
             IOperation op;
-            if (!operations.TryGetValue(operatorName, out op))
+            if (!_operations.TryGetValue(operatorName, out op))
                 throw new CalculationException("Неизвестная операция " + operatorName);
 
             return op;

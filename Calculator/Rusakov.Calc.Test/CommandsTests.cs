@@ -131,5 +131,19 @@ namespace Rusakov.Calc.Test
             var exeption = Assert.Throws<CalculationException>(action);
             Assert.That(exeption.Message, Is.EqualTo("Невозможно разделить 2 числа"));
         }
+
+        [Test]
+        public void DivideCommand_DivideByZero_FailExecute()
+        {
+            var command = new DivideCommand();
+            var stack = new Stack<decimal>();
+            stack.Push(1);
+            stack.Push(0);
+
+            TestDelegate action = () => command.Execute(stack);
+
+            var exeption = Assert.Throws<CalculationException>(action);
+            Assert.That(exeption.Message, Is.EqualTo("Обнаружено деление ноль"));
+        }
     }
 }
