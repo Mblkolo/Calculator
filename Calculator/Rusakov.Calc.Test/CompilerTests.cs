@@ -52,7 +52,7 @@ namespace Rusakov.Calc.Test
 
             TestDelegate process = () => compiller.ProcessNumberLexem(lexeme, commands, stack);
 
-            Assert.Throws<ArgumentException>(process);
+            Assert.Throws<CalculationException>(process);
         }
 
         [Test]
@@ -129,7 +129,7 @@ namespace Rusakov.Calc.Test
 
             TestDelegate process = () => compiller.ProcessCloseBracketLexem(lexeme, commands, stack);
 
-            Assert.Throws<ArgumentException>(process);
+            Assert.Throws<CalculationException>(process);
         }
 
 
@@ -235,7 +235,7 @@ namespace Rusakov.Calc.Test
 
             TestDelegate process = () => compiller.ProcessRemainingLexem(commands, stack);
 
-            Assert.Throws<ArgumentException>(process);
+            Assert.Throws<CalculationException>(process);
         }
 
         [Test]

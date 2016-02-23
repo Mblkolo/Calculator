@@ -53,6 +53,7 @@
     <Compile Include="Interfaces\ILexer.cs" />
     <Compile Include="Interfaces\IOperation.cs" />
     <Compile Include="Interfaces\Lexeme.cs" />
+    <Compile Include="Interfaces\CalculationException.cs" />
     <Compile Include="Lexer.cs" />
     <Compile Include="Operations\DivideOperation.cs" />
     <Compile Include="Operations\MinusOperation.cs" />

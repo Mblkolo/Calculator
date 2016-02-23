@@ -3,6 +3,7 @@ using Rusakov.Calc.Operations;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,10 +20,25 @@ namespace Rusakov.Calc
             {
                 Console.Write("Введите выражение: ");
                 string expression = Console.ReadLine();
-                
-                decimal result = calc.Calculate(expression);
+                if (expression == "exit")
+                    return;
 
-                Console.WriteLine("Результат: " + result.ToString(CultureInfo.InvariantCulture));
+                try
+                {
+                    decimal result = calc.Calculate(expression);
+                    Console.WriteLine("Результат: " + result.ToString(CultureInfo.InvariantCulture));
+                }
+                catch(CalculationException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                catch(Exception e)
+                {
+                    LogExeption(e);
+                    Console.WriteLine("Невозможно вычислить выражение");
+                }
+
+                Console.WriteLine();
             }
         }
 
@@ -39,6 +55,19 @@ namespace Rusakov.Calc
 
             var compiler = new Compiler(operations);
             return new Calculator(lexer, compiler);
+        }
+
+        private static void LogExeption(Exception exeption)
+        {
+            try
+            {
+                //Сохраняем одну последнюю ошибку
+                File.WriteAllText(".\\log.txt", exeption.ToString());
+            }
+            catch(Exception e)
+            {
+                //Проглатывае исключение на случай если у нас нет прав на запись
+            }
         }
     }
 }
