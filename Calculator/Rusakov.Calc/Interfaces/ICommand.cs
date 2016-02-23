@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Rusakov.Calc
+namespace Rusakov.Calc.Interfaces
 {
-    interface ICommand
+    /// <summary>
+    /// Выполняет действие над стеком
+    /// </summary>
+    internal interface ICommand
     {
         void Execute(Stack<decimal> state);
     }

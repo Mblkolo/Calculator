@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Rusakov.Calc.Commands;
+using Rusakov.Calc.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

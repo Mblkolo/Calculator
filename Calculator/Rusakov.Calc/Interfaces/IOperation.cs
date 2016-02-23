@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Rusakov.Calc
+namespace Rusakov.Calc.Interfaces
 {
+    /// <summary>
+    /// Описание операции
+    /// </summary>
     internal interface IOperation
     {
         char Operator { get; }
 
-        #warning IsUnary не реализовано
-        bool IsUnary { get; }
+        //#warning IsUnary не реализовано
+        //bool IsUnary { get; }
 
         bool IsLeft { get; }
 

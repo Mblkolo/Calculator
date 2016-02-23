@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rusakov.Calc.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,10 +9,10 @@ namespace Rusakov.Calc
 {
     class Calculator
     {
-        private readonly Lexer _lexer;
-        private readonly Compiler _compiler;
+        private readonly ILexer _lexer;
+        private readonly ICompiler _compiler;
 
-        public Calculator(Lexer lexer, Compiler compiller)
+        public Calculator(ILexer lexer, ICompiler compiller)
         {
             _lexer = lexer;
             _compiler = compiller;

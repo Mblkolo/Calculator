@@ -1,4 +1,5 @@
-﻿using Rusakov.Calc.Operations;
+﻿using Rusakov.Calc.Interfaces;
+using Rusakov.Calc.Operations;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

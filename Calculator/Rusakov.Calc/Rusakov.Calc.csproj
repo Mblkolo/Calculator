@@ -48,9 +48,11 @@
     <Compile Include="Commands\PlusCommand.cs" />
     <Compile Include="Commands\PushCommand.cs" />
     <Compile Include="Compiler.cs" />
-    <Compile Include="ICommand.cs" />
-    <Compile Include="IOperation.cs" />
-    <Compile Include="Lexeme.cs" />
+    <Compile Include="Interfaces\ICommand.cs" />
+    <Compile Include="Interfaces\ICompiler.cs" />
+    <Compile Include="Interfaces\ILexer.cs" />
+    <Compile Include="Interfaces\IOperation.cs" />
+    <Compile Include="Interfaces\Lexeme.cs" />
     <Compile Include="Lexer.cs" />
     <Compile Include="Operations\DivideOperation.cs" />
     <Compile Include="Operations\MinusOperation.cs" />

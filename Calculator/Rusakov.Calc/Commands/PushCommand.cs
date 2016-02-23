@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rusakov.Calc.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,10 @@ using System.Threading.Tasks;
 
 namespace Rusakov.Calc.Commands
 {
-    class PushCommand : ICommand
+    /// <summary>
+    /// Команда обработки числа
+    /// </summary>
+    internal class PushCommand : ICommand
     {
         public readonly decimal Value;
 

@@ -1,4 +1,5 @@
 ﻿using Rusakov.Calc.Commands;
+using Rusakov.Calc.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Rusakov.Calc
 {
-    class Compiler
+    class Compiler : ICompiler
     {
         private Dictionary<string, IOperation> operations;
 

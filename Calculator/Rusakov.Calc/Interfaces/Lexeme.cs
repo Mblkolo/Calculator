@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Rusakov.Calc
+namespace Rusakov.Calc.Interfaces
 {
-    class Lexeme
+    internal class Lexeme
     {
         public readonly string Value;
         public readonly LexemeType Type;
@@ -18,7 +18,7 @@ namespace Rusakov.Calc
         }
     }
 
-    enum LexemeType
+    internal enum LexemeType
     {
         Operator,
         Number,
