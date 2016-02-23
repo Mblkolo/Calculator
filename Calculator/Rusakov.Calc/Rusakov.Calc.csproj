@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Calculator.cs" />
     <Compile Include="Commands\DivideCommand.cs" />
     <Compile Include="Commands\MinusCommand.cs" />
     <Compile Include="Commands\MultiplyCommand.cs" />

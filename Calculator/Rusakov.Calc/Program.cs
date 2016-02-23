@@ -1,6 +1,7 @@
 ﻿using Rusakov.Calc.Operations;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,21 @@ namespace Rusakov.Calc
     {
         static void Main(string[] args)
         {
+            Calculator calc = getCalculator();
+
+            while(true)
+            {
+                Console.Write("Введите выражение: ");
+                string expression = Console.ReadLine();
+                
+                decimal result = calc.Calculate(expression);
+
+                Console.WriteLine("Результат: " + result.ToString(CultureInfo.InvariantCulture));
+            }
+        }
+
+        private static Calculator getCalculator()
+        {
             var lexer = new Lexer();
             var operations = new IOperation[] 
             {
@@ -19,20 +35,9 @@ namespace Rusakov.Calc
                 new MultiplyOperation(),
                 new DivideOperation()
             };
+
             var compiler = new Compiler(operations);
-
-            while(true)
-            {
-                string expression = Console.ReadLine();
-
-                Lexeme[] lexem = lexer.Parse(expression);
-                ICommand[] commands = compiler.Compile(lexem);
-                var stack = new Stack<decimal>();
-                foreach(var c in commands)
-                    c.Execute(stack);
-
-                Console.WriteLine(stack.Pop());
-            }
+            return new Calculator(lexer, compiler);
         }
     }
 }
