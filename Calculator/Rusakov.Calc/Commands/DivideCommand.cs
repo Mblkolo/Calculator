@@ -12,7 +12,7 @@ namespace Rusakov.Calc.Commands
         public void Execute(Stack<decimal> state)
         {
             if (state.Count < 2)
-                throw new ArgumentException("Невозможно разделить 2 числа. Чисел всего " + state.Count);
+                throw new CalculationException("Невозможно разделить 2 числа");
 
             var a = state.Pop();
             var b = state.Pop();
