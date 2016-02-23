@@ -15,7 +15,7 @@ namespace Rusakov.Calc.Test
         [TestCase("123...23", LexemeType.Number)] //Формат числа не проблема лексера
         [TestCase("(", LexemeType.OpenBracket)]
         [TestCase(")", LexemeType.CloseBracket)]
-        [TestCase("+", LexemeType.BinaryOperator)]
+        [TestCase("+", LexemeType.UnaryOperator )]
         [TestCase("p", LexemeType.BinaryOperator)]
         public void Parse_SimpleLexeme_LexemeEqualsInputText(string text, LexemeType type)
         {
@@ -53,6 +53,57 @@ namespace Rusakov.Calc.Test
             Assert.That(lexemes[0].Value, Is.EqualTo("1"));
             Assert.That(lexemes[1].Type, Is.EqualTo(LexemeType.BinaryOperator));
             Assert.That(lexemes[1].Value, Is.EqualTo("+"));
+        }
+
+        [Test]
+        public void Parse_WhenOperationAfterOperation_UnaryOperation()
+        {
+            var lexer = new Lexer();
+            var text = "1++1";
+
+            Lexeme[] lexemes = lexer.Parse(text);
+
+            Assert.That(lexemes.Length, Is.EqualTo(4));
+            Assert.That(lexemes[2].Type, Is.EqualTo(LexemeType.UnaryOperator));
+        }
+
+        [Test]
+        public void Parse_WhenOperationAfterOpenBracket_UnaryOperation()
+        {
+            var lexer = new Lexer();
+            var text = "(+1";
+
+            Lexeme[] lexemes = lexer.Parse(text);
+
+            Assert.That(lexemes.Length, Is.EqualTo(3));
+            Assert.That(lexemes[0].Type, Is.EqualTo(LexemeType.OpenBracket));
+            Assert.That(lexemes[1].Type, Is.EqualTo(LexemeType.UnaryOperator));
+        }
+
+        [Test]
+        public void Parse_WhenOperationAfterCloseBracket_BynaryOperation()
+        {
+            var lexer = new Lexer();
+            var text = ")+1";
+
+            Lexeme[] lexemes = lexer.Parse(text);
+
+            Assert.That(lexemes.Length, Is.EqualTo(3));
+            Assert.That(lexemes[0].Type, Is.EqualTo(LexemeType.CloseBracket));
+            Assert.That(lexemes[1].Type, Is.EqualTo(LexemeType.BinaryOperator));
+        }
+
+        [Test]
+        public void Parse_WhenOperationAfterNumber_BynaryOperation()
+        {
+            var lexer = new Lexer();
+            var text = "1+1";
+
+            Lexeme[] lexemes = lexer.Parse(text);
+
+            Assert.That(lexemes.Length, Is.EqualTo(3));
+            Assert.That(lexemes[0].Type, Is.EqualTo(LexemeType.CloseBracket));
+            Assert.That(lexemes[1].Type, Is.EqualTo(LexemeType.BinaryOperator));
         }
 
         [Test]
