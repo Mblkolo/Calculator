@@ -64,7 +64,7 @@ namespace Rusakov.Calc
                 //Сохраняем одну последнюю ошибку
                 File.WriteAllText(".\\log.txt", exeption.ToString());
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 //Проглатывае исключение на случай если у нас нет прав на запись
             }

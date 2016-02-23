@@ -22,7 +22,7 @@ namespace Rusakov.Calc
         {
             Lexeme[] lexem = _lexer.Parse(expression);
             if (lexem.Length == 0)
-                throw new ArgumentException("Нет выражения");
+                throw new CalculationException("Пустое выражение");
 
             ICommand[] commands = _compiler.Process(lexem);
             
@@ -31,10 +31,10 @@ namespace Rusakov.Calc
                 c.Execute(stack);
 
             if(stack.Count == 0)
-                throw new ArgumentException("Невозможно вычислить выражение");
+                throw new CalculationException("В выражении не хватает чисел");
 
             if (stack.Count > 1)
-                throw new ArgumentException("Невозможно вычислить выражение, возможно пропущен оператор(ы)");
+                throw new CalculationException("В выражении не хватает операторов");
 
             return stack.Pop();
         }
