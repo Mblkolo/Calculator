@@ -46,7 +46,15 @@ namespace Rusakov.Calc
                 }
 
                 //Любой другой символ считается оператором
-                lexemes.Add(new Lexeme(new String(c, 1), LexemeType.BinaryOperator));
+                var lexemeType = LexemeType.UnaryOperator;
+                var latestLexeme = lexemes.LastOrDefault();
+                if (latestLexeme != null)
+                {
+                    if (latestLexeme.Type == LexemeType.Number || latestLexeme.Type == LexemeType.CloseBracket)
+                        lexemeType = LexemeType.BinaryOperator;
+                }
+
+                lexemes.Add(new Lexeme(new String(c, 1), lexemeType));
                 continue;
             }
 

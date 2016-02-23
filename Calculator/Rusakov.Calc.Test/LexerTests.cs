@@ -16,7 +16,7 @@ namespace Rusakov.Calc.Test
         [TestCase("(", LexemeType.OpenBracket)]
         [TestCase(")", LexemeType.CloseBracket)]
         [TestCase("+", LexemeType.UnaryOperator )]
-        [TestCase("p", LexemeType.BinaryOperator)]
+        [TestCase("p", LexemeType.UnaryOperator)]
         public void Parse_SimpleLexeme_LexemeEqualsInputText(string text, LexemeType type)
         {
             var lexer = new Lexer();
@@ -102,7 +102,7 @@ namespace Rusakov.Calc.Test
             Lexeme[] lexemes = lexer.Parse(text);
 
             Assert.That(lexemes.Length, Is.EqualTo(3));
-            Assert.That(lexemes[0].Type, Is.EqualTo(LexemeType.CloseBracket));
+            Assert.That(lexemes[0].Type, Is.EqualTo(LexemeType.Number));
             Assert.That(lexemes[1].Type, Is.EqualTo(LexemeType.BinaryOperator));
         }
 
@@ -119,8 +119,8 @@ namespace Rusakov.Calc.Test
             Assert.That(lexemes[0].Value, Is.EqualTo("1.23"));
 
             Assert.That(lexemes[1].Type, Is.EqualTo(LexemeType.BinaryOperator));
-            Assert.That(lexemes[2].Type, Is.EqualTo(LexemeType.BinaryOperator));
-            Assert.That(lexemes[3].Type, Is.EqualTo(LexemeType.BinaryOperator));
+            Assert.That(lexemes[2].Type, Is.EqualTo(LexemeType.UnaryOperator));
+            Assert.That(lexemes[3].Type, Is.EqualTo(LexemeType.UnaryOperator));
             Assert.That(lexemes[4].Type, Is.EqualTo(LexemeType.Number));
             Assert.That(lexemes[5].Type, Is.EqualTo(LexemeType.CloseBracket));
             Assert.That(lexemes[6].Type, Is.EqualTo(LexemeType.BinaryOperator));
